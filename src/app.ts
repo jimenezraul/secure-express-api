@@ -12,6 +12,7 @@ import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
+import syncDatabase from '@utils/syncDatabase';
 
 export class App {
   public app: express.Application;
@@ -24,6 +25,7 @@ export class App {
     this.port = PORT || 3000;
 
     this.initializeMiddlewares();
+    this.initializeDatabase();
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
@@ -57,6 +59,15 @@ export class App {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
+  }
+
+  private async initializeDatabase() {
+    try {
+      await syncDatabase();
+      logger.info('Database synchronized successfully');
+    } catch (error) {
+      logger.error('Error synchronizing database:', error);
+    }
   }
 
   private initializeSwagger() {
