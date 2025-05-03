@@ -1,9 +1,51 @@
-import { User } from '@interfaces/users.interface';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../db/db';
 
-// password: password123456789
-export const UserModel: User[] = [
-  { id: 1, email: 'example1@email.com', password: '$2b$10$2YC2ht8x06Yto5VAr08kben8.oxjTPrMn0yJhv8xxSVVltH3bOs4u' },
-  { id: 2, email: 'example2@email.com', password: '$2b$10$2YC2ht8x06Yto5VAr08kben8.oxjTPrMn0yJhv8xxSVVltH3bOs4u' },
-  { id: 3, email: 'example3@email.com', password: '$2b$10$2YC2ht8x06Yto5VAr08kben8.oxjTPrMn0yJhv8xxSVVltH3bOs4u' },
-  { id: 4, email: 'example4@email.com', password: '$2b$10$2YC2ht8x06Yto5VAr08kben8.oxjTPrMn0yJhv8xxSVVltH3bOs4u' },
-];
+class User extends Model {
+  public id!: number;
+  public uid!: string;
+  public email!: string;
+  public password!: string;
+  // timestamps!
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+User.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    uid: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  },
+  {
+    sequelize, // passing the sequelize instance
+    modelName: 'User', // model name
+    tableName: 'users', // the table name (can be customized)
+  }
+);
+
+export default User;
