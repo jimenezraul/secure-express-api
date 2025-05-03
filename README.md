@@ -54,7 +54,20 @@ DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
 ```
+3. Run the seeders to create the necessary tables and insert initial data:
+```bash
+npm run db:seed
+```
+
 ## 6. Run Server
 ```bash
 npm run dev
 ```
+
+## 7. Access the API Swagger
+Open your browser and navigate to `http://localhost:3000/api-docs` to access the Swagger UI documentation for the API. You can test the API endpoints directly from the Swagger UI.
+
+## 8. Test the API
+To test the api use the following usernames and passwords:
+- email: `example1@email.com`
+- Password: `password123456789`
