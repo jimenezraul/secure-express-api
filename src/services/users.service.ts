@@ -29,7 +29,7 @@ export class UserService {
     const hashedPassword = await hash(userData.password, 10);
   
     const createdUser = await UserModel.create({
-      uid: generateCustomID(),
+      uid: generateCustomID("USR_"),
       email: userData.email,
       password: hashedPassword,
     });

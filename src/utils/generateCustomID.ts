@@ -1,4 +1,4 @@
-function generateCustomID(prefix = '') {
+function generateCustomID(prefix:string) {
     const ALPHANUMERIC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const LENGTH = 34;
     let result = prefix;
