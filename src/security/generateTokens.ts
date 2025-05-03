@@ -16,9 +16,9 @@ export function generateRefreshToken(user: UserDto): Token {
 }
 
 // Generate RS256 tokens
-export function generateTokens(user: UserDto): { access_token: TokenData; refresh_token: TokenData } {
-    const access_token: TokenData = generateAccessToken(user);
-    const refresh_token: TokenData = generateRefreshToken(user);
+export function generateTokens(user: UserDto): { access_token: Token; refresh_token: Token } {
+    const access_token: Token = generateAccessToken(user);
+    const refresh_token: Token = generateRefreshToken(user);
     
     return { access_token, refresh_token };
 }

@@ -1,51 +1,64 @@
 import { hash } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/httpException';
-import { User } from '@interfaces/users.interface';
-import { UserModel } from '@models/users.model';
+import { User as UserInterface } from '@interfaces/users.interface';
+import UserModel from '@models/users.model';
+import { UserDto } from '@/dtos/users.dto';
+import generateCustomID from '@/utils/generateCustomID';
 
 @Service()
 export class UserService {
-  public async findAllUser(): Promise<User[]> {
-    const users: User[] = UserModel;
-    return users;
+  public async findAllUser(): Promise<UserDto[]> {
+    const users = await UserModel.findAll();
+    const userDtos = users.map(user => new UserDto(user));
+    return userDtos;
   }
+  
 
-  public async findUserById(userId: number): Promise<User> {
-    const findUser: User = UserModel.find(user => user.id === userId);
+  public async findUserById(userId: string): Promise<UserDto> {
+    const findUser: UserInterface = await UserModel.findOne({ where: { uid: userId } });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
-    return findUser;
+    return new UserDto(findUser);
   }
 
-  public async createUser(userData: User): Promise<User> {
-    const findUser: User = UserModel.find(user => user.email === userData.email);
+  public async createUser(userData: UserInterface): Promise<UserInterface> {
+    const findUser = await UserModel.findOne({ where: { email: userData.email } });
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
-
+  
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: User = { ...userData, id: UserModel.length + 1, password: hashedPassword };
-
-    return createUserData;
-  }
-
-  public async updateUser(userId: number, userData: User): Promise<User[]> {
-    const findUser: User = UserModel.find(user => user.id === userId);
-    if (!findUser) throw new HttpException(409, "User doesn't exist");
-
-    const hashedPassword = await hash(userData.password, 10);
-    const updateUserData: User[] = UserModel.map((user: User) => {
-      if (user.id === findUser.id) user = { ...userData, id: userId, password: hashedPassword };
-      return user;
+  
+    const createdUser = await UserModel.create({
+      uid: generateCustomID(),
+      email: userData.email,
+      password: hashedPassword,
     });
-
-    return updateUserData;
+  
+    return createdUser;
   }
+  
 
-  public async deleteUser(userId: number): Promise<User[]> {
-    const findUser: User = UserModel.find(user => user.id === userId);
+  public async updateUser(userId: string, userData: UserInterface): Promise<UserInterface> {
+    const findUser = await UserModel.findOne({ where: { uid: userId } });
+    if (!findUser) throw new HttpException(409, "User doesn't exist");
+  
+    const hashedPassword = await hash(userData.password, 10);
+  
+    await UserModel.update(
+      { ...userData, password: hashedPassword },
+      { where: { uid: userId } }
+    );
+  
+    const updatedUser = await UserModel.findOne({ where: { uid: userId } });
+    if (!updatedUser) throw new HttpException(500, "Error retrieving updated user");
+  
+    return updatedUser as UserInterface;
+  }
+  
+  public async deleteUser(userId: string): Promise<void> {
+    const findUser: UserInterface = await UserModel.findOne({ where: { uid: userId } });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
-    const deleteUserData: User[] = UserModel.filter(user => user.id !== findUser.id);
-    return deleteUserData;
+    await UserModel.destroy({ where: { uid: userId } });
   }
 }
