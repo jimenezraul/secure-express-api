@@ -1,8 +1,10 @@
 import { Request } from 'express';
 import { User } from '@interfaces/users.interface';
+import { TokenResponseDto } from '@/dtos/users.dto';
 
 export interface DataStoredInToken {
-  id: number;
+  uid: string;
+  exp: number;
 }
 
 export interface TokenData {
@@ -12,4 +14,11 @@ export interface TokenData {
 
 export interface RequestWithUser extends Request {
   user: User;
+}
+
+export interface AuthServiceInterface {
+  login(userData: User): Promise<TokenResponseDto>;
+  logout(userData: User): Promise<User>;
+  refreshToken(refreshToken: string): Promise<TokenResponseDto>;
+  signup(userData: User): Promise<User>;
 }
