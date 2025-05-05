@@ -8,7 +8,7 @@ export function isAdmin(req: RequestWithUser, res: Response, next: NextFunction)
     throw new HttpException(403, 'Access denied. No roles found.');
   }
 
-  const isAdmin = user.roles.some((role: any) => role.name === 'admin');
+  const isAdmin = user.roles.some((role: any) => role.name.toLowerCase() === 'admin');
   if (!isAdmin) {
     throw new HttpException(403, 'Access denied. Admins only.');
   }

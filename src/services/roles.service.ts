@@ -20,9 +20,30 @@ export class RolesService {
     }
 
     public async getRoleById(id: string): Promise<RoleDto | null> {
-        const role = await Role.findOne({ where: { id } });
+        const role = await Role.findOne({ where: { uid: id } });
         if (!role) return null;
         const roleDto = new RoleDto(role);
         return roleDto;
+    }
+
+    public async updateRole(id: string, roleData: CreateRoleDto): Promise<RoleDto | null> {
+        const role = await Role.findOne({ where: { uid: id } });
+        if (!role) return null;
+
+        role.name = roleData.name;
+        await role.save();
+
+        const roleDto = new RoleDto(role);
+        return roleDto;
+    }
+
+    public async deleteRole(id: string): Promise<boolean> {
+        const role = await Role.findOne({
+            where: { uid: id }
+         });
+        if (!role) return false;
+
+        await role.destroy();
+        return true;
     }
 }

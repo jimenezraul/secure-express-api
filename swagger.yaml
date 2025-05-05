@@ -187,6 +187,66 @@ paths:
           description: Conflict
         500:
           description: Server Error
+  /roles/{id}:
+    get:
+      tags:
+        - roles
+      summary: Find Role By Id
+      parameters:
+        - name: id
+          in: path
+          description: Role Id
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        409:
+          description: Conflict
+        500:
+          description: Server Error
+    put:
+      tags:
+        - roles
+      summary: Update Role By Id
+      parameters:
+        - name: id
+          in: path
+          description: Role Id
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: role Data
+          required: true
+          schema:
+            $ref: '#/definitions/roles'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Server Error
+    delete:
+      tags:
+        - roles
+      summary: Delete Role By Id
+      parameters:
+        - name: id
+          in: path
+          description: Role Id
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        409:
+          description: Conflict
+        500:
+          description: Server Error
 
 definitions:
   users:
