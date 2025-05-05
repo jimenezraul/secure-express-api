@@ -2,7 +2,6 @@ import { Service } from 'typedi';
 import { Role } from '@/models';
 import { CreateRoleDto } from '@/dtos/roles.dto';
 import { RoleDto } from '@/dtos/roles.dto';
-import generateCustomID from '@/utils/generateCustomID';
 
 @Service()
 export class RolesService {

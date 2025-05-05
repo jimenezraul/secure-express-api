@@ -1,6 +1,6 @@
 import { hash, compare } from 'bcrypt';
 import { Service } from 'typedi';
-import { HttpException } from '@exceptions/httpException';
+import { HttpException } from '@exceptions/HttpException';
 import { User as UserInterface } from '@interfaces/users.interface';
 import { User, Role } from '@models/index';
 import { TokenResponseDto, Token, UserDto } from '@/dtos/users.dto';

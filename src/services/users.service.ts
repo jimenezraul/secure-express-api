@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { HttpException } from '@exceptions/httpException';
+import { HttpException } from '@exceptions/HttpException';
 import { User as UserInterface } from '@interfaces/users.interface';
 import { UserDto } from '@/dtos/users.dto';
 import generateCustomID from '@/utils/generateCustomID';
