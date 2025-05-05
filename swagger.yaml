@@ -1,115 +1,199 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Example API
+  description: API documentation for Auth, User, and Role routes
+
+host: localhost:3000
+basePath: /
+schemes:
+  - https
+  - http
+
 tags:
-- name: users
-  description: users API
+  - name: auth
+    description: auth API
+  - name: users
+    description: users API
+  - name: roles
+    description: roles API
 
 paths:
-# [GET] users
+  /login:
+    post:
+      tags:
+        - auth
+      summary: Login User
+      parameters:
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: '#/definitions/users'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Server Error
+
+  /logout:
+    post:
+      tags:
+        - auth
+      summary: Logout User
+      responses:
+        200:
+          description: OK
+        500:
+          description: Server Error
+
+  /refresh:
+    post:
+      tags:
+        - auth
+      summary: Refresh Token
+      responses:
+        200:
+          description: OK
+        401:
+          description: Unauthorized
+        500:
+          description: Server Error
+
   /users:
     get:
       tags:
-      - users
+        - users
       summary: Find All Users
       responses:
         200:
-          description: 'OK'
+          description: OK
         500:
-          description: 'Server Error'
-
-# [POST] users
+          description: Server Error
     post:
       tags:
-      - users
+        - users
       summary: Add User
       parameters:
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: '#/definitions/users'
       responses:
         201:
-          description: 'Created'
+          description: Created
         400:
-          description: 'Bad Request'
+          description: Bad Request
         409:
-          description: 'Conflict'
+          description: Conflict
         500:
-          description: 'Server Error'
+          description: Server Error
 
-# [GET] users/id
   /users/{id}:
     get:
       tags:
-      - users
+        - users
       summary: Find User By Id
       parameters:
-      - name: id
-        in: path
-        description: User Id
-        required: true
-        type: integer
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          type: string
       responses:
         200:
-          description: 'OK'
+          description: OK
         409:
-          description: 'Conflict'
+          description: Conflict
         500:
-          description: 'Server Error'
-
-# [PUT] users/id
+          description: Server Error
     put:
       tags:
-      - users
+        - users
       summary: Update User By Id
       parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: '#/definitions/users'
       responses:
         200:
-          description: 'OK'
+          description: OK
         400:
-          description: 'Bad Request'
+          description: Bad Request
         409:
-          description: 'Conflict'
+          description: Conflict
         500:
-          description: 'Server Error'
-
-# [DELETE] users/id
+          description: Server Error
     delete:
       tags:
-      - users
+        - users
       summary: Delete User By Id
       parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          type: string
       responses:
         200:
-          description: 'OK'
+          description: OK
         409:
-          description: 'Conflict'
+          description: Conflict
         500:
-          description: 'Server Error'
+          description: Server Error
 
-# definitions
+  /roles:
+    get:
+      tags:
+        - roles
+      summary: Find All Roles
+      responses:
+        200:
+          description: OK
+        500:
+          description: Server Error
+    post:
+      tags:
+        - roles
+      summary: Add Role
+      parameters:
+        - name: body
+          in: body
+          description: role Data
+          required: true
+          schema:
+            $ref: '#/definitions/roles'
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Server Error
+
 definitions:
   users:
     type: object
     required:
-        - email
-        - password
+      - email
+      - password
     properties:
       email:
         type: string
@@ -118,6 +202,11 @@ definitions:
         type: string
         description: user Password
 
-schemes:
- - https
- - http
+  roles:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: role name
