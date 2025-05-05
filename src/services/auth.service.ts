@@ -2,30 +2,48 @@ import { hash, compare } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/httpException';
 import { User as UserInterface } from '@interfaces/users.interface';
-import UserModel from '@/models/users.model';
+import { User, Role } from '@models/index';
 import { TokenResponseDto, Token, UserDto } from '@/dtos/users.dto';
 import { generateTokens, generateAccessToken } from '@/security/generateTokens';
 import { AuthServiceInterface, DataStoredInToken } from '@interfaces/auth.interface';
 import { REFRESH_PUBLIC_KEY } from '@/config/keys';
 import { verify } from 'jsonwebtoken';
-import db from '../db/db';
 
 @Service()
 export class AuthService implements AuthServiceInterface {
   public async signup(userData: UserInterface): Promise<UserInterface> {
     // const findUser: UserModel = UserModel.find(user => user.email === userData.email);
-    const user: UserInterface = await UserModel.findOne({ where: { email: userData.email } });
+    const user: UserInterface = await User.findOne({
+      where: { email: userData.email },
+      include: [
+      {
+        model: Role,
+        as: 'roles',
+        through: { attributes: [] },
+        attributes: ['uid', 'name'], 
+      },
+    ] });
     if (user) throw new HttpException(409, `This email ${userData.email} already exists`);
 
     const hashedPassword = await hash(userData.password, 10);
-    const createUserData: UserInterface = { ...userData, id: UserModel.length + 1, password: hashedPassword };
+    const createUserData: UserInterface = { ...userData, id: User.length + 1, password: hashedPassword };
 
     return createUserData;
   }
 
   public async login(userData: UserInterface): Promise<TokenResponseDto> {
-    const findUser: UserInterface = await UserModel.findOne({ where: { email: userData.email } });
-   
+    const findUser: UserInterface = await User.findOne({
+      where: { email: userData.email },
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          through: { attributes: [] },
+          attributes: ['uid', 'name'], 
+        },
+      ]
+    });
+ 
     // const findUser: UserInterface = UserModel.find(user => user.email === userData.email);
     if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
 
@@ -46,7 +64,11 @@ export class AuthService implements AuthServiceInterface {
   }
 
   public async logout(userData: UserInterface): Promise<UserInterface> {
-    const findUser: UserInterface = await UserModel.findOne({ where: { email: userData.email } });
+    const findUser: UserInterface = await User.findOne(
+      {
+        where: { email: userData.email } 
+      }
+    );
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
     return findUser;
@@ -69,7 +91,7 @@ export class AuthService implements AuthServiceInterface {
     const secondsLeft = exp - currentTimeInSeconds;
     const daysLeft = Math.floor(secondsLeft / (60 * 60 * 24));
 
-    const findUser: UserInterface = await UserModel.findOne({ where: { uid: uid } });
+    const findUser: UserInterface = await User.findOne({ where: { uid: uid } });
     
     if (!findUser) throw new Error("User not found");
 
@@ -93,7 +115,7 @@ export class AuthService implements AuthServiceInterface {
         token: refreshToken,
       }
     }
-    console.log('Access token:', accessToken);
+  
     return {
       user,
       access_token: accessToken,

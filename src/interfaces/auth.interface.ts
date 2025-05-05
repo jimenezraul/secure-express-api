@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { User } from '@interfaces/users.interface';
-import { TokenResponseDto } from '@/dtos/users.dto';
+import { TokenResponseDto, UserDto } from '@/dtos/users.dto';
 
 export interface DataStoredInToken {
   uid: string;

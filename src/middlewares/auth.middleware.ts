@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { HttpException } from '@exceptions/httpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
-import UserModel from '@models/users.model';
+import {User, Role} from '@models/index';
 import { ACCESS_PUBLIC_KEY } from '../config/keys';
 
 const getAuthorization = req => {
@@ -27,7 +27,17 @@ export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: 
 
     const decoded = verify(token, ACCESS_PUBLIC_KEY) as DataStoredInToken;
   
-    const user = await UserModel.findOne({ where: { uid: decoded.uid } });
+    const user = await User.findOne({
+      where: { uid: decoded.uid },
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          through: { attributes: [] },
+          attributes: ['uid', 'name'],
+        },
+      ],
+        });
 
     if (!user) {
       return next(new HttpException(401, 'User not found for authentication token'));

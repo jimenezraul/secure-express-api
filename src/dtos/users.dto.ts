@@ -1,4 +1,5 @@
 import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { RoleDto } from './roles.dto';
 
 export class CreateUserDto {
   @IsEmail()
@@ -24,11 +25,13 @@ export class UserDto {
   email: string;
   createdAt: Date;
   updatedAt: Date;
+  roles: RoleDto[];
   constructor(user: any) {
     this.uid = user.uid;
     this.email = user.email;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
+    this.roles = user.roles ? user.roles.map((role: any) => new RoleDto(role)) : [];
   }
 }
 
