@@ -3,11 +3,11 @@ import sequelize from '../db/db';
 import generateCustomID from '@/utils/generateCustomID';
 
 class Role extends Model {
-    public id!: number;
-    public uid!: string;
-    public name!: string;
-    public readonly createdAt!: Date;
-    public updatedAt!: Date;
+  public id!: number;
+  public uid!: string;
+  public name!: string;
+  public readonly createdAt!: Date;
+  public updatedAt!: Date;
 }
 
 Role.init(
@@ -18,30 +18,31 @@ Role.init(
       autoIncrement: true,
     },
     uid: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },    
     name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
   },
-    {
-    hooks: {
-      // set up beforeCreate lifecycle "hook" functionality
-      async beforeCreate(newRoleData) {
-        newRoleData.uid = generateCustomID("ROLE_");
-      },
-      async beforeUpdate(updatedRoleData) {
-        updatedRoleData.updatedAt = new Date();
-      },
-    },
+  {
     sequelize,
     modelName: 'Role',
     tableName: 'roles',
     timestamps: true,
+    hooks: {
+      beforeValidate: (role) => {
+        if (!role.uid) {
+          role.setDataValue('uid', generateCustomID('ROLE_'));
+        }
+      },
+      beforeUpdate: (role) => {
+        role.setDataValue('updatedAt', new Date());
+      },
+    },
   }
 );
 

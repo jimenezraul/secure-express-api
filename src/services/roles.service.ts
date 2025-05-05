@@ -2,20 +2,19 @@ import { Service } from 'typedi';
 import { Role } from '@/models';
 import { CreateRoleDto } from '@/dtos/roles.dto';
 import { RoleDto } from '@/dtos/roles.dto';
+import generateCustomID from '@/utils/generateCustomID';
 
 @Service()
 export class RolesService {
     
     public async createRole(roleData: CreateRoleDto): Promise<RoleDto> {
-        const role = await Role.create({ ...roleData });
+        const role = await Role.create({ name: roleData.name });
         const roleDto = new RoleDto(role);
         return roleDto;
     }
 
     public async getRoles(): Promise<RoleDto[]> {
-        console.log("Fetching all roles");
         const roles = await Role.findAll();
-        console.log("roles: ", roles);
         const roleDtos = roles.map(role => new RoleDto(role));
         return roleDtos;
     }

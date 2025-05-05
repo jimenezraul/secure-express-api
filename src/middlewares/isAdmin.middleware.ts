@@ -4,7 +4,6 @@ import { RequestWithUser } from '@/interfaces/auth.interface';
 
 export function isAdmin(req: RequestWithUser, res: Response, next: NextFunction) {
   const user = req.user; // AuthMiddleware must set this
-    console.log('User:', user);
   if (!user || !user.roles || !Array.isArray(user.roles)) {
     throw new HttpException(403, 'Access denied. No roles found.');
   }
