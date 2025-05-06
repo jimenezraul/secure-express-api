@@ -35,7 +35,7 @@ export class AuthService implements AuthServiceInterface {
     const newUser = await User.create({
       ...userData
     });
-  console.log('newUser', newUser.id);
+
     // Associate role after creation
     await UserRole.create({
       userId: newUser.id,
