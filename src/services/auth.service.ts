@@ -2,7 +2,7 @@ import { compare } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/HttpException';
 import { User as UserInterface } from '@interfaces/users.interface';
-import { User, Role } from '@models/index';
+import { User, Role, UserRole } from '@models/index';
 import { TokenResponseDto, Token, UserDto } from '@/dtos/users.dto';
 import { generateTokens, generateAccessToken } from '@/security/generateTokens';
 import { AuthServiceInterface, DataStoredInToken } from '@interfaces/auth.interface';
@@ -12,22 +12,37 @@ import { verify } from 'jsonwebtoken';
 @Service()
 export class AuthService implements AuthServiceInterface {
   public async signup(userData: UserInterface): Promise<void> {
-    // const findUser: UserModel = UserModel.find(user => user.email === userData.email);
-    const user: UserInterface = await User.findOne({
+    const existingUser = await User.findOne({
       where: { email: userData.email },
       include: [
-      {
-        model: Role,
-        as: 'roles',
-        through: { attributes: [] },
-        attributes: ['uid', 'name'], 
-      },
-    ] });
-    if (user) throw new HttpException(409, `This email ${userData.email} already exists`);
-
-    await User.create({ ...userData });
+        {
+          model: Role,
+          as: 'roles',
+          through: { attributes: [] },
+          attributes: ['uid', 'name'],
+        },
+      ],
+    });
+  
+    if (existingUser) {
+      throw new HttpException(409, `This email ${userData.email} already exists`);
+    }
+  
+    const role = await Role.findOne({ where: { name: 'user' } });
+    if (!role) throw new HttpException(409, `This role doesn't exist`);
+  
+    // Create user without roles first
+    const newUser = await User.create({
+      ...userData
+    });
+  console.log('newUser', newUser.id);
+    // Associate role after creation
+    await UserRole.create({
+      userId: newUser.id,
+      roleId: role.id,
+    });
   }
-
+  
   public async login(userData: UserInterface): Promise<TokenResponseDto> {
     const findUser: UserInterface = await User.findOne({
       where: { email: userData.email },

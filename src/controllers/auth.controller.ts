@@ -12,9 +12,9 @@ export class AuthController {
   public signUp = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userData: User = req.body;
-      const signUpUserData: User = await this.auth.signup(userData);
+      await this.auth.signup(userData);
 
-      res.status(201).json({ data: signUpUserData, message: 'signup' });
+      res.status(201).json({ message: 'signup' });
     } catch (error) {
       next(error);
     }

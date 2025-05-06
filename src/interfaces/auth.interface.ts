@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { User } from '@interfaces/users.interface';
-import { TokenResponseDto, UserDto } from '@/dtos/users.dto';
+import { User as UserInterface } from '@interfaces/users.interface';
+import { TokenResponseDto } from '@/dtos/users.dto';
 
 export interface DataStoredInToken {
   uid: string;
@@ -13,12 +13,12 @@ export interface TokenData {
 }
 
 export interface RequestWithUser extends Request {
-  user: User;
+  user: UserInterface;
 }
 
 export interface AuthServiceInterface {
-  login(userData: User): Promise<TokenResponseDto>;
-  logout(userData: User): Promise<User>;
+  login(userData: UserInterface): Promise<TokenResponseDto>;
+  logout(userData: UserInterface): Promise<UserInterface>;
   refreshToken(refreshToken: string): Promise<TokenResponseDto>;
-  signup(userData: User): Promise<User>;
+  signup(userData: UserInterface): Promise<void>;
 }
