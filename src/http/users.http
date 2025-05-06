@@ -4,7 +4,8 @@
 ###
 # Find All Users
 GET {{ baseURL }}/users
-
+Cookie: access_token=<access_token>
+Content-Type: application/json
 ###
 # Find User By Id
 GET {{ baseURL }}/users/1
