@@ -1,6 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db/db';
 import bcrypt from 'bcrypt';
+import generateCustomID from '@/utils/generateCustomID';
 
 class User extends Model {
   public id!: number;
@@ -26,6 +27,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      defaultValue: () => generateCustomID('USR_'),
     },
     email: {
       type: DataTypes.STRING,

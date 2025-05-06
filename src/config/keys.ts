@@ -1,6 +1,6 @@
 // src/config/keys.ts
 import dotenv from 'dotenv';
-dotenv.config();  // ← loads your .env into process.env
+dotenv.config();
 
 export const ACCESS_PRIVATE_KEY  = Buffer.from(process.env.ACCESS_PRIVATE_KEY!, 'base64').toString('utf-8');
 export const ACCESS_PUBLIC_KEY   = Buffer.from(process.env.ACCESS_PUBLIC_KEY!, 'base64').toString('utf-8');

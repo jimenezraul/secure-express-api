@@ -40,6 +40,27 @@ paths:
           description: Unauthorized
         500:
           description: Server Error
+  /signup:
+    post:
+      tags:
+        - auth
+      summary: Signup User
+      parameters:
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: '#/definitions/users'
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Server Error
 
   /logout:
     post:

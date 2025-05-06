@@ -1,4 +1,4 @@
-import { hash, compare } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { Service } from 'typedi';
 import { HttpException } from '@exceptions/HttpException';
 import { User as UserInterface } from '@interfaces/users.interface';
@@ -11,7 +11,7 @@ import { verify } from 'jsonwebtoken';
 
 @Service()
 export class AuthService implements AuthServiceInterface {
-  public async signup(userData: UserInterface): Promise<UserInterface> {
+  public async signup(userData: UserInterface): Promise<void> {
     // const findUser: UserModel = UserModel.find(user => user.email === userData.email);
     const user: UserInterface = await User.findOne({
       where: { email: userData.email },
@@ -25,10 +25,7 @@ export class AuthService implements AuthServiceInterface {
     ] });
     if (user) throw new HttpException(409, `This email ${userData.email} already exists`);
 
-    const hashedPassword = await hash(userData.password, 10);
-    const createUserData: UserInterface = { ...userData, id: User.length + 1, password: hashedPassword };
-
-    return createUserData;
+    await User.create({ ...userData });
   }
 
   public async login(userData: UserInterface): Promise<TokenResponseDto> {
