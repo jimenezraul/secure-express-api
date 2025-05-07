@@ -36,7 +36,7 @@ Role.init(
     hooks: {
       beforeValidate: (role) => {
         if (!role.uid) {
-          role.setDataValue('uid', generateCustomID('ROLE_'));
+          role.setDataValue('uid', generateCustomID('ROL_'));
         }
       },
       beforeUpdate: (role) => {
