@@ -181,7 +181,7 @@ paths:
     get:
       tags:
         - users
-      summary: Find All Users By Page
+      summary: Find Users By Page
       parameters:
         - name: page
           in: query
