@@ -18,6 +18,9 @@ export class UserRoute implements Routes {
   initializeRoutes() {
     // Protect ALL routes (including PUT/POST) unless public
     this.router.get(`${this.path}`, AuthMiddleware, isAdmin, this.user.getUsers);
+    // get user pagination
+    this.router.get(`${this.path}/pagination`, AuthMiddleware, this.user.getUserPagination);
+    // get user by id
     this.router.get(`${this.path}/:id`, AuthMiddleware, this.user.getUserById);
     this.router.post(`${this.path}`, AuthMiddleware, ValidationMiddleware(CreateUserDto), this.user.createUser);
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(UpdateUserDto), this.user.updateUser);

@@ -177,6 +177,36 @@ paths:
           description: Conflict
         500:
           description: Server Error
+  /users/pagination:
+    get:
+      tags:
+        - users
+      summary: Find All Users By Page
+      parameters:
+        - name: page
+          in: query
+          description: Page Number
+          required: false
+          type: string
+          default: '1'
+        - name: limit
+          in: query
+          description: Limit Number
+          required: false
+          type: string
+          default: '2'
+        
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/users'
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Server Error
 
   /roles:
     get:

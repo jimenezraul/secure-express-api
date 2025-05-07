@@ -65,4 +65,38 @@ export class UserService {
 
     await User.destroy({ where: { uid: userId } });
   }
+
+  // Get user by page and limit
+  public async getUsersByPage(page: number, limit: number): Promise<{
+    users: UserDto[];
+    total: number;
+    totalPages: number;
+  }> {
+    const offset = (page - 1) * limit;
+  
+    const { count, rows } = await User.findAndCountAll({
+      distinct: true,
+      limit,
+      offset,
+      attributes: ['uid', 'email', 'createdAt', 'updatedAt'],
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          through: { attributes: [] },
+          attributes: ['uid', 'name'],
+        },
+      ],
+    });
+  
+    const userDtos = rows.map(user => new UserDto(user));
+    const totalPages = Math.ceil(count / limit);
+  
+    return {
+      users: userDtos,
+      total: count,
+      totalPages,
+    };
+  }
+  
 }

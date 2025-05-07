@@ -61,4 +61,21 @@ export class UserController {
       next(error);
     }
   };
+
+  public getUserPagination = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const page: number = parseInt(req.query.page as string || '1');
+      if (page < 1) throw new Error('Page must be greater than 0');
+      const limit: number = parseInt(req.query.limit as string || '5');
+      if (limit < 1 || limit > 50) throw new Error('Limit must be between 1 and 50');
+
+      const {users, total, totalPages}: { users: UserDto[]; total: number, totalPages: number } = await this.user.getUsersByPage(page, limit);
+      
+      res.status(200).json({ data: users, total, totalPages });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
 }
