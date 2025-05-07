@@ -8,21 +8,18 @@ export class RolesService {
     
     public async createRole(roleData: CreateRoleDto): Promise<RoleDto> {
         const role = await Role.create({ name: roleData.name });
-        const roleDto = new RoleDto(role);
-        return roleDto;
+        return new RoleDto(role);
     }
 
     public async getRoles(): Promise<RoleDto[]> {
         const roles = await Role.findAll();
-        const roleDtos = roles.map(role => new RoleDto(role));
-        return roleDtos;
+        return roles.map(role => new RoleDto(role));
     }
 
     public async getRoleById(id: string): Promise<RoleDto | null> {
         const role = await Role.findOne({ where: { uid: id } });
         if (!role) return null;
-        const roleDto = new RoleDto(role);
-        return roleDto;
+        return new RoleDto(role);
     }
 
     public async updateRole(id: string, roleData: CreateRoleDto): Promise<RoleDto | null> {
@@ -31,9 +28,7 @@ export class RolesService {
 
         role.name = roleData.name;
         await role.save();
-
-        const roleDto = new RoleDto(role);
-        return roleDto;
+        return new RoleDto(role);
     }
 
     public async deleteRole(id: string): Promise<boolean> {

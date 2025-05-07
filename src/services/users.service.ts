@@ -19,8 +19,7 @@ export class UserService {
         },
       ]
     });
-    const userDtos = users.map(user => new UserDto(user));
-    return userDtos;
+    return users.map(user => new UserDto(user));
   }
   
 
@@ -35,12 +34,10 @@ export class UserService {
     const findUser = await User.findOne({ where: { email: userData.email } });
     if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
   
-    const createdUser = await User.create({
+    return await User.create({
       uid: generateCustomID("USR_"),
       email: userData.email
     });
-  
-    return createdUser;
   }
   
 
