@@ -5,8 +5,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env.development.local') })
 
 // Seed roles first
 const roles = [
-  { id: 1, uid: 'ROL_admin_XYZ123', name: 'admin' },
-  { id: 2, uid: 'ROL_user_ABC456', name: 'user' },
+  { id: 1, uid: 'ROL_admin_XYZ123', name: 'admin', description: 'Administrator' },
+  { id: 2, uid: 'ROL_user_ABC456', name: 'user', description: 'User' },
 ];
 
 // Default password: 'password123456789'
@@ -55,6 +55,7 @@ const users = [
       id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
       uid VARCHAR(100) NOT NULL UNIQUE,
       name VARCHAR(50) NOT NULL UNIQUE,
+      description VARCHAR(255) NOT NULL,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
@@ -86,9 +87,9 @@ const users = [
   // Seed roles
   for (const role of roles) {
     await connection.execute(
-      'INSERT INTO roles (id, uid, name, createdAt, updatedAt) VALUES (?, ?, ?, NOW(), NOW())',
-      [role.id, role.uid, role.name]
-    );
+      'INSERT INTO roles (id, uid, name, description, createdAt, updatedAt) VALUES (?, ?, ?, ?, NOW(), NOW())',
+      [role.id, role.uid, role.name, role.description]
+    );    
   }
 
   // Seed users and user_roles
