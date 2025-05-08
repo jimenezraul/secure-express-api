@@ -5,8 +5,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env.development.local') })
 
 // Seed roles first
 const roles = [
-  { id: 1, uid: 'ROL_admin_XYZ123', name: 'admin', description: 'Administrator' },
-  { id: 2, uid: 'ROL_user_ABC456', name: 'user', description: 'User' },
+  { id: 1, uid: 'ROL_admin_XYZ123', name: 'admin', description: 'Administrator with full access to manage users, settings, and content.' },
+  { id: 2, uid: 'ROL_user_ABC456', name: 'user', description: 'Regular user with access to basic features and personal data management.' },
 ];
 
 // Default password: 'password123456789'
