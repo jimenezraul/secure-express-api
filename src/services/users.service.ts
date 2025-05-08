@@ -15,7 +15,7 @@ export class UserService {
           model: Role,
           as: 'roles',
           through: { attributes: [] },
-          attributes: ['uid', 'name'], 
+          attributes: ['uid', 'name', 'description'], 
         },
       ]
     });
@@ -81,7 +81,7 @@ export class UserService {
           model: Role,
           as: 'roles',
           through: { attributes: [] },
-          attributes: ['uid', 'name'],
+          attributes: ['uid', 'name', 'description'],
         },
       ],
     });

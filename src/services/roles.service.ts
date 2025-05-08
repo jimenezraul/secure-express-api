@@ -25,11 +25,12 @@ export class RolesService {
     public async updateRole(id: string, roleData: CreateRoleDto): Promise<RoleDto | null> {
         const role = await Role.findOne({ where: { uid: id } });
         if (!role) return null;
-
-        role.name = roleData.name;
+    
+        Object.assign(role, roleData);
         await role.save();
         return new RoleDto(role);
     }
+    
 
     public async deleteRole(id: string): Promise<boolean> {
         const role = await Role.findOne({

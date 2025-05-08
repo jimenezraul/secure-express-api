@@ -317,7 +317,11 @@ definitions:
     type: object
     required:
       - name
+      - description
     properties:
       name:
         type: string
         description: role name
+      description:
+        type: string
+        description: role description
