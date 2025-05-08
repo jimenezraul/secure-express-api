@@ -57,7 +57,6 @@ export class App {
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
-      console.log("path", route.path);
       this.app.use('/', route.router);
     });
   }
