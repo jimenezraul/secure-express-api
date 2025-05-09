@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { Container } from 'typedi';
 import { RolesService } from '@/services/roles.service';
-import { RoleDto } from '@/dtos/roles.dto';
-import { CreateRoleDto } from '@/dtos/roles.dto';
+import { RoleDto, RoleRequestDto } from '@/dtos/roles.dto';
 
 export class RoleController {
     public rolesService = Container.get(RolesService);
@@ -19,7 +18,7 @@ export class RoleController {
 
     public createRole = async (req: Request, res: Response): Promise<void> => {
         try {
-            const roleData: CreateRoleDto = req.body;
+            const roleData: RoleRequestDto = req.body;
             const newRole: RoleDto = await this.rolesService.createRole(roleData);
             res.status(201).json(newRole);
         } catch (error) {
@@ -44,7 +43,7 @@ export class RoleController {
     public updateRole = async (req: Request, res: Response): Promise<void> => {
         try {
             const roleId = req.params.id;
-            const roleData: CreateRoleDto = req.body;
+            const roleData: RoleRequestDto = req.body;
             const updatedRole = await this.rolesService.updateRole(roleId, roleData);
             if (!updatedRole) {
                 res.status(404).json({ message: 'Role not found' });

@@ -1,3 +1,5 @@
+import {  IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+
 export class RoleDto {
     public uid: string;
     public name: string;
@@ -10,6 +12,15 @@ export class RoleDto {
   }
 }
 
-export class CreateRoleDto {
+export class RoleRequestDto {
+  @IsString()
+  @MinLength(4)
+  @MaxLength(32)
+  @IsNotEmpty()
   public name: string;
+  @IsString()
+  @MinLength(5)
+  @MaxLength(100)
+  @IsNotEmpty()
+  public description: string;
 }

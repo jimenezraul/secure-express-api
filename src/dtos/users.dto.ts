@@ -1,7 +1,7 @@
 import { IsEmail, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
 import { RoleDto } from './roles.dto';
 
-export class CreateUserDto {
+export class UserRequestDto {
   @IsEmail()
   public email: string;
 
