@@ -4,7 +4,6 @@ info:
   title: Example API
   description: API documentation for Auth, User, and Role routes
 
-host: localhost:3000
 basePath: /
 schemes:
   - https
