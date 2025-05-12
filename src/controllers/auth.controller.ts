@@ -43,12 +43,11 @@ export class AuthController {
 
       deleteCookies(res);
 
-      res.status(200).json({
-        data: {
-          id: logOutUserData.id,
-          email: logOutUserData.email,
-        },
-      message: 'logout' });
+      res.status(200).json(
+        {
+          message: 'logout' 
+        }
+      );
     } catch (error) {
       next(error);
     }

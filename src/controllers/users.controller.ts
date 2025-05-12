@@ -11,7 +11,7 @@ export class UserController {
     try {
       const findAllUsersData: UserDto[] = await this.user.findAllUser();
 
-      res.status(200).json({ data: findAllUsersData, message: 'findAll' });
+      res.status(200).json(findAllUsersData);
     } catch (error) {
       next(error);
     }
@@ -73,7 +73,7 @@ export class UserController {
 
       const {users, total, totalPages}: { users: UserDto[]; total: number, totalPages: number } = await this.user.getUsersByPage(page, limit);
       
-      res.status(200).json({ data: users, total, totalPages });
+      res.status(200).json(users);
     } catch (error) {
       next(error);
     }
