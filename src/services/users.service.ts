@@ -24,7 +24,16 @@ export class UserService {
   
 
   public async findUserById(userId: string): Promise<UserDto> {
-    const findUser: UserInterface = await User.findOne({ where: { uid: userId } });
+    const findUser: UserInterface = await User.findOne({ where: { uid: userId },
+    include: [
+        {
+          model: Role,
+          as: 'roles',
+          through: { attributes: [] },
+          attributes: ['uid', 'name', 'description'],
+        },
+      ],  
+    });
     if (!findUser) throw new HttpException(409, "User doesn't exist");
 
     return new UserDto(findUser);
