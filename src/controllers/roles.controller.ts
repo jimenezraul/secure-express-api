@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { RolesService } from '@/services/roles.service';
-import { RoleDto, RoleRequestDto } from '@/dtos/roles.dto';
+import { RoleDto, RoleRequestDto, RoleToUserDto } from '@/dtos/roles.dto';
 
 export class RoleController {
     public rolesService = Container.get(RolesService);
@@ -63,6 +63,35 @@ export class RoleController {
                 res.status(404).json({ message: 'Role not found' });
                 return;
             }
+            res.status(204).send();
+        } catch (error) {
+           next(error);
+        }
+    }
+
+    public addRoleToUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { userId, roleId }: RoleToUserDto = req.body;
+            if (!userId || !roleId) {
+                res.status(400).json({ message: 'Invalid parameters' });
+                return;
+            }
+
+            await this.rolesService.addRoleToUser(userId, roleId);
+            res.status(204).send();
+        } catch (error) {
+           next(error);
+        }
+    }
+
+    public removeRoleFromUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const { userId, roleId } = req.query;
+            if (typeof userId !== 'string' || typeof roleId !== 'string') {
+                res.status(400).json({ message: 'Invalid parameters' });
+                return;
+            }
+            await this.rolesService.removeRoleFromUser(userId, roleId);
             res.status(204).send();
         } catch (error) {
            next(error);

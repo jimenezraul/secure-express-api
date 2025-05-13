@@ -297,6 +297,44 @@ paths:
           description: Conflict
         500:
           description: Server Error
+  /roles/role-to-user:
+    post:
+      tags:
+        - role-to-user
+      summary: Assign Role To User By Id
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/role-to-user'
+      responses:
+        201:
+          description: Created
+        409:
+          description: Conflict
+        500:
+          description: Server Error
+    delete:
+    tags:
+      - role-to-user
+    summary: Remove Role From User By Id
+    parameters:
+      - name: roleId
+        in: query
+        required: true
+        type: string
+      - name: userId
+        in: query
+        required: true
+        type: string
+    responses:
+      200:
+        description: Role removed
+      409:
+        description: Conflict
+      500:
+        description: Server Error
 
 definitions:
   users:
@@ -324,3 +362,17 @@ definitions:
       description:
         type: string
         description: role description
+
+  role-to-user:
+    type: object
+    required:
+      - roleId
+      - userId
+    properties:
+      roleId:
+        type: string
+        description: role id
+      userId:
+        type: string
+        description: user id
+

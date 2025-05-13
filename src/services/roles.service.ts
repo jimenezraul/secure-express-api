@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { Role } from '@/models';
+import { Role, User } from '@/models';
 import { RoleRequestDto } from '@/dtos/roles.dto';
 import { RoleDto } from '@/dtos/roles.dto';
 
@@ -43,4 +43,19 @@ export class RolesService {
         await role.destroy();
         return true;
     }
+
+    public async addRoleToUser(userId: string, roleId: string): Promise<void> {
+        const user = await User.findOne({ where: { uid: userId } });
+        const role = await Role.findOne({ where: { uid: roleId } });
+        if (!user || !role) return;
+        user.addRole(role);
+    }
+
+    public async removeRoleFromUser(userId: string, roleId: string): Promise<void> {
+        const user = await User.findOne({ where: { uid: userId } });
+        const role = await Role.findOne({ where: { uid: roleId } });
+        if (!user || !role) return;
+        user.removeRole(role);
+    }
+
 }

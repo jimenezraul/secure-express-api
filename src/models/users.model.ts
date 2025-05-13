@@ -2,6 +2,8 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db/db';
 import bcrypt from 'bcrypt';
 import generateCustomID from '@/utils/generateCustomID';
+import Role from './roles.model';
+
 
 class User extends Model {
   public id!: number;
@@ -10,6 +12,9 @@ class User extends Model {
   public password!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public addRole!: (role: Role | Role[] | number | number[]) => Promise<void>;
+  public removeRole!: (role: Role | Role[] | number | number[]) => Promise<void>;
 
   validatePassword(loginPw: string): boolean {
     return bcrypt.compareSync(loginPw, this.password);

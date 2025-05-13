@@ -24,3 +24,13 @@ export class RoleRequestDto {
   @IsNotEmpty()
   public description: string;
 }
+
+export class RoleToUserDto {
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+  @IsString()
+  @IsNotEmpty()
+  roleId: string;
+}
+
