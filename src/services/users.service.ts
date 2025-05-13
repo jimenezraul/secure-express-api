@@ -3,7 +3,7 @@ import { HttpException } from '@exceptions/HttpException';
 import { User as UserInterface } from '@interfaces/users.interface';
 import { UserDto } from '@/dtos/users.dto';
 import generateCustomID from '@/utils/generateCustomID';
-import { User, Role } from '@models/index';
+import { User, Role } from '@/models';
 
 @Service()
 export class UserService {

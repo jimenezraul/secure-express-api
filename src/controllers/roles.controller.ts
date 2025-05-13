@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { RolesService } from '@/services/roles.service';
 import { RoleDto, RoleRequestDto } from '@/dtos/roles.dto';
@@ -6,27 +6,27 @@ import { RoleDto, RoleRequestDto } from '@/dtos/roles.dto';
 export class RoleController {
     public rolesService = Container.get(RolesService);
 
-    public getAllRoles = async (req: Request, res: Response): Promise<void> => {
+    public getAllRoles = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const roles = await this.rolesService.getRoles();
             const roleDtos: RoleDto[] = roles.map(role => new RoleDto(role));
             res.status(200).json(roleDtos);
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching roles', error });
+           next(error);
         }
     }
 
-    public createRole = async (req: Request, res: Response): Promise<void> => {
+    public createRole = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const roleData: RoleRequestDto = req.body;
             const newRole: RoleDto = await this.rolesService.createRole(roleData);
             res.status(201).json(newRole);
         } catch (error) {
-            res.status(500).json({ message: 'Error creating role', error });
+           next(error);
         }
     }
 
-    public getRoleById = async (req: Request, res: Response): Promise<void> => {
+    public getRoleById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const roleId = req.params.id;
             const role = await this.rolesService.getRoleById(roleId);
@@ -36,11 +36,11 @@ export class RoleController {
             }
             res.status(200).json(role);
         } catch (error) {
-            res.status(500).json({ message: 'Error fetching role', error });
+            next(error);
         }
     }
 
-    public updateRole = async (req: Request, res: Response): Promise<void> => {
+    public updateRole = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const roleId = req.params.id;
             const roleData: RoleRequestDto = req.body;
@@ -51,11 +51,11 @@ export class RoleController {
             }
             res.status(200).json(updatedRole);
         } catch (error) {
-            res.status(500).json({ message: 'Error updating role', error });
+           next(error);
         }
     }
 
-    public deleteRole = async (req: Request, res: Response): Promise<void> => {
+    public deleteRole = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const roleId = req.params.id;
             const deleted = await this.rolesService.deleteRole(roleId);
@@ -65,7 +65,7 @@ export class RoleController {
             }
             res.status(204).send();
         } catch (error) {
-            res.status(500).json({ message: 'Error deleting role', error });
+           next(error);
         }
     }
 }
