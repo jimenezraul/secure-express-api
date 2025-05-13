@@ -1,13 +1,15 @@
 import { Service } from 'typedi';
 import { Role } from '@/models';
-import { CreateRoleDto } from '@/dtos/roles.dto';
+import { RoleRequestDto } from '@/dtos/roles.dto';
 import { RoleDto } from '@/dtos/roles.dto';
 
 @Service()
 export class RolesService {
     
-    public async createRole(roleData: CreateRoleDto): Promise<RoleDto> {
-        const role = await Role.create({ name: roleData.name });
+    public async createRole(roleData: RoleRequestDto): Promise<RoleDto> {
+        const role = await Role.create({
+            ...roleData
+        });
         return new RoleDto(role);
     }
 
@@ -22,7 +24,7 @@ export class RolesService {
         return new RoleDto(role);
     }
 
-    public async updateRole(id: string, roleData: CreateRoleDto): Promise<RoleDto | null> {
+    public async updateRole(id: string, roleData: RoleRequestDto): Promise<RoleDto | null> {
         const role = await Role.findOne({ where: { uid: id } });
         if (!role) return null;
     
