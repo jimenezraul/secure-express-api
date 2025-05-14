@@ -19,7 +19,7 @@ export class AuthService implements AuthServiceInterface {
           model: Role,
           as: 'roles',
           through: { attributes: [] },
-          attributes: ['uid', 'name'],
+          attributes: ['uid', 'name', 'description'], 
         },
       ],
     });
@@ -51,7 +51,7 @@ export class AuthService implements AuthServiceInterface {
           model: Role,
           as: 'roles',
           through: { attributes: [] },
-          attributes: ['uid', 'name'], 
+          attributes: ['uid', 'name', 'description'], 
         },
       ]
     });
@@ -103,7 +103,16 @@ export class AuthService implements AuthServiceInterface {
     const secondsLeft = exp - currentTimeInSeconds;
     const daysLeft = Math.floor(secondsLeft / (60 * 60 * 24));
 
-    const findUser: UserInterface = await User.findOne({ where: { uid: uid } });
+    const findUser: UserInterface = await User.findOne({ where: { uid: uid },
+      include: [
+        {
+          model: Role,
+          as: 'roles',
+          through: { attributes: [] },
+          attributes: ['uid', 'name', 'description'], 
+        },
+      ]
+    });
     
     if (!findUser) throw new Error("User not found");
 
