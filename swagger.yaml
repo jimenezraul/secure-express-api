@@ -84,7 +84,16 @@ paths:
           description: Unauthorized
         500:
           description: Server Error
-
+  /users/me:
+    get:
+      tags:
+        - users
+      summary: Find User By Id
+      responses:
+        200:
+          description: OK
+        500:
+          description: Server Error
   /users:
     get:
       tags:
